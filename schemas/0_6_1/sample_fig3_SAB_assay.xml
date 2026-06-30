@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<haml xmlns="urn:HAML.Namespace"
+      version="0.6.1">
+
+    <patient>
+        <patient-id>Patient_254662</patient-id>
+        <sample>
+            <sample-id>Patient_serum_draw_412</sample-id>
+            <working-sample>
+                <working-sample-id>Patient_serum_prep_123</working-sample-id>
+                <assay>
+                    <assay-id>1</assay-id>
+                    <run-id>RUN-4420392.81</run-id>
+                    <assay-date>2026-04-18</assay-date>
+
+                    <assay-kit>
+                        <assay-type>Solid Phase Panel</assay-type>
+                        <assay-catalog>
+                            <catalog-number>LS1A04</catalog-number>
+                            <lot-number>LOT-2026-001</lot-number>
+                            <kit-manufacturer>One Lambda</kit-manufacturer>
+                            <kit-description>Single antigen bead assay, Class I</kit-description>
+                        </assay-catalog>
+                        <interpretation-software>HLA Fusion</interpretation-software>
+                        <interpretation-software-version>5.2</interpretation-software-version>
+                     </assay-kit>
+
+                </assay>
+            </working-sample>
+        </sample>
+    </patient>
+</haml>
+
+

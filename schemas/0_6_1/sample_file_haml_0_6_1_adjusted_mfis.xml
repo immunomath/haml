@@ -36,7 +36,7 @@
                 </treatment>
                 <treatment>
                     <method>Dilution</method>
-                    <ratio>1:1000</ratio>
+                    <dilution-factor>16</dilution-factor>
                     <diluent>PBS</diluent>
                 </treatment>
 
@@ -47,10 +47,23 @@
                     <!-- Details about the kit -->
                     <assay-kit>
                         <assay-type>Solid Phase Assay</assay-type>
-                        <catalog-number>LS1A04_extended</catalog-number>
-                        <lot-number>12345</lot-number>
-                        <kit-manufacturer>One_Lambda</kit-manufacturer>
-                        <kit-description>This is the extended panel for doing class I and some other stuff (Lifecodes....)</kit-description>
+                        <assay-catalog>
+                            <catalog-number>LS1A04_extended</catalog-number>
+                            <lot-number>asdfasdfklj</lot-number>
+                            <kit-manufacturer>One_Lambda</kit-manufacturer>
+                            <kit-description>This is the extended panel for doing class I and some other stuff (Lifecodes....)</kit-description>
+
+                        </assay-catalog>
+
+                        <detection-reagent-catalog>
+                            <catalog-number>hfjfgkhjgfj</catalog-number>
+                            <lot-number>tstst</lot-number>
+                            <kit-manufacturer>One_Lambda</kit-manufacturer>
+                            <kit-description>This is the extended panel for doing class I and some other stuff (Lifecodes....)</kit-description>
+
+                        </detection-reagent-catalog>
+
+
                         <interpretation-software>HLA_Fusion</interpretation-software>
                         <interpretation-software-version>4.1</interpretation-software-version>
                         <raw-MFI-divider>0.56</raw-MFI-divider>
@@ -158,7 +171,7 @@
                     <!-- Assay-level interpretation -->
                     <assay-interpretation>
                         <interpretation-context>Kidney Transplantation Workup</interpretation-context>
-                        <interpretation-context-comment>This pre-tranplant screen was performed 2 weeks before transplant to check if they had developed antibodies due to a transfusion.</interpretation-context-comment>
+                        <interpretation-context-comment>This pre-transplant screen was performed 2 weeks before transplant to check if they had developed antibodies due to a transfusion.</interpretation-context-comment>
                         <specificities>
                             <specificities-type>Positive</specificities-type>
                             <specificities-string>A1+A2+B7+B*51:02</specificities-string>

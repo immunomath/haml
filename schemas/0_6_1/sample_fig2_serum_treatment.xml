@@ -4,7 +4,6 @@
 
     <haml-id>
         <root>example-lab.haml</root>
-        <!--<root>https://example-lab.org/haml</root>-->
         <extension>2026-000123</extension>
     </haml-id>
 
@@ -12,9 +11,9 @@
     <requisition-reason>Recipient Antibody Assessment</requisition-reason>
 
     <patient>
-        <patient-id>Patient_440223</patient-id>
+        <patient-id>00004567</patient-id>
         <sample>
-            <sample-id>Patient_serum_draw_412</sample-id>
+            <sample-id>9862604001</sample-id>
             <sample-date>2024-12-11</sample-date>
             <sample-type>Serum</sample-type>
             <testing-laboratory>International Histocompatibility Laboratory</testing-laboratory>

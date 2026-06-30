@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<haml xmlns="urn:HAML.Namespace"
+      version="0.6.1">
+    <patient>
+        <patient-id>Patient_440223</patient-id>
+        <sample>
+            <sample-id>Patient_serum_draw_412</sample-id>
+
+            <working-sample>
+                <working-sample-id>Patient_serum_prep_123</working-sample-id>
+
+                <assay>
+                    <assay-id>assay-1</assay-id>
+
+                    <target-cell-observation>
+                        <cell-info>
+                            <cell-id>BAG88295</cell-id>
+                            <cell-type>target</cell-type>
+                            <HLA-target-type>who#3.62.0#HLA-A*02:01+HLA-A*24:02+HLA-B*07:02+HLA-B*08:01+HLA-C*07:01+
+                                HLA-C*07:02+HLA-DRB1*03:01+HLA-DRB1*07:01+HLA-DQB1*02:01~HLA-DQA1*05:01+
+                                HLA-DQB1*03:03~HLA-DQA1*03:01</HLA-target-type>
+                            <HLA-target-serological-specificity>who#3.62.0#HLA-A2+HLA-A24+HLA-B7+HLA-B8+HLA-Cw7+HLA-DR17+HLA-DR7+
+                                HLA-DQ2+HLA-DQ9</HLA-target-serological-specificity>
+                        </cell-info>
+                    </target-cell-observation>
+                </assay>
+            </working-sample>
+        </sample>
+    </patient>
+</haml>
+
+

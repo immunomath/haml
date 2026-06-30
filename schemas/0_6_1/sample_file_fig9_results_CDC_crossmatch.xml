@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<haml xmlns="urn:HAML.Namespace"
+      version="0.6.1">
+    <patient>
+        <patient-id>Patient_440223</patient-id>
+
+        <sample>
+            <sample-id>Patient_serum_draw_412</sample-id>
+
+            <working-sample>
+                <working-sample-id>Patient_serum_prep_123</working-sample-id>
+                <assay>
+                    <assay-id>1</assay-id>
+
+                    <target-cell-observation>
+                        <cell-info>
+                            <cell-id>CDCXM-TCELL-001</cell-id>
+                            <cell-type>target</cell-type>
+                            <cell-source>donor T cells</cell-source>
+                        </cell-info>
+
+                        <cell-raw-data>
+                            <cell-count>1000</cell-count>
+                            <raw-percent-cytotoxicity>72</raw-percent-cytotoxicity>
+                        </cell-raw-data>
+
+                        <cell-adjusted-data>
+                            <adjusted-data-id>CDCXM-TCELL-001</adjusted-data-id>
+                            <cdc-score>6</cdc-score>
+                        </cell-adjusted-data>
+
+                        <cell-interpretation>
+                            <adjusted-data-id>CDCXM-TCELL-0011</adjusted-data-id>
+                            <cell-classification>Positive</cell-classification>
+                            <classification-entity>Local Laboratory rule set</classification-entity>
+                            <interpretation-reason>Adjusted cytotoxicity above positivity threshold for T cell flow crossmatch</interpretation-reason>
+                        </cell-interpretation>
+
+                    </target-cell-observation>
+                </assay>
+            </working-sample>
+        </sample>
+    </patient>
+</haml>
