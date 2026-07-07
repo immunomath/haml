@@ -120,7 +120,7 @@
                             <adjusted-mfi>209.7</adjusted-mfi>
                             <formula>AD is the Antigen-density-adjusted MFI.
                                 Modified MFI = Raw MFI / antigen density</formula>
-                            <bead-plausible>true</bead-plausible>
+                            <plausible>true</plausible>
                         </bead-adjusted-data>
                         <bead-adjusted-data>
                             <adjusted-data-id>2</adjusted-data-id>
@@ -128,7 +128,7 @@
                             <adjusted-mfi>302.3</adjusted-mfi>
                             <formula>"BG Adjusted" Background adjusted MFI
                                 Modified MFI = Raw MFI - Negative Control working sample Bead</formula>
-                            <bead-plausible>true</bead-plausible>
+                            <plausible>true</plausible>
                         </bead-adjusted-data>
                         <bead-adjusted-data>
                             <adjusted-data-id>3</adjusted-data-id>
@@ -136,7 +136,7 @@
                             <mfi-ratio>3.4</mfi-ratio>
                             <formula> MFI is divided by the lowest reactive antigen.
                                 MFI/LRA</formula>
-                            <bead-plausible>true</bead-plausible>
+                            <plausible>true</plausible>
                         </bead-adjusted-data>
 
                         <!-- Two bead interpretations, from a Software tool and a Human Interpretation -->
@@ -281,37 +281,35 @@
                 <role>Lab Director</role>
             </signing-authority>
 
-            <results-interpreters>
 
-                <results-interpreter>
-                    <interpreter-id>123</interpreter-id>
-                    <interpreter-type>Technician Interpretation</interpreter-type>
-                    <interpreter-name>Teddy Technician</interpreter-name>
-                    <institution>UMC Utrecht TI Lab</institution>
-                    <role>Lab Technician</role>
-                </results-interpreter>
 
-            </results-interpreters>
+            <results-interpreter>
+                <interpreter-id>123</interpreter-id>
+                <interpreter-type>Technician Interpretation</interpreter-type>
+                <interpreter-name>Teddy Technician</interpreter-name>
+                <institution>UMC Utrecht TI Lab</institution>
+                <role>Lab Technician</role>
+            </results-interpreter>
 
-            <performers>
 
-                <performer>
-                    <performer-id>567</performer-id>
-                    <performer-type>Validation</performer-type>
-                    <performer-name>Mathijs G</performer-name>
-                    <institution>ACME Labs</institution>
-                    <role>Quality Expert</role>
-                </performer>
 
-                <performer>
-                    <performer-id>987</performer-id>
-                    <performer-type>Requestor</performer-type>
-                    <performer-name>David W</performer-name>
-                    <institution>NMDP</institution>
-                    <role>FHIR Expert</role>
-                </performer>
+            <performer>
+                <performer-id>567</performer-id>
+                <performer-type>Validation</performer-type>
+                <performer-name>Mathijs G</performer-name>
+                <institution>ACME Labs</institution>
+                <role>Quality Expert</role>
+            </performer>
 
-            </performers>
+            <performer>
+                <performer-id>987</performer-id>
+                <performer-type>Requestor</performer-type>
+                <performer-name>David W</performer-name>
+                <institution>NMDP</institution>
+                <role>FHIR Expert</role>
+            </performer>
+
+
 
         </diagnostic-report>
 

@@ -56,18 +56,18 @@
             Attributes:
             -----------
             - root:  Unique publicly registered identifier for the HAML
-            creator's organization.
-            (ex: NMDP HL7 id is "2.16.840.1.113883.3.1470")
-            Format is expected to be a string of digits and dot
-            delimiters.  (required)
+                creator's organization.
+                (ex: NMDP HL7 id is "2.16.840.1.113883.3.1470")
+                Format is expected to be a string of digits and dot
+                delimiters.  (required)
             - extension:   A unique document identifier managed internally by the
-            organization specified in 'root'. Can be any alphanumeric
-            format desired by the organization. (ex: "haml-0.9.7-123456789.23a")
-            (optional and must be at least 1 non-whitespace character
-            long)
-            NOTE - If extension is NOT included, the unique document
-            identifier is expected to be appended at the end of the root
-            identifier above in accordance with HL7 practices.
+                organization specified in 'root'. Can be any alphanumeric
+                format desired by the organization. (ex: "haml-0.9.7-123456789.23a")
+                (optional and must be at least 1 non-whitespace character
+                long)
+                NOTE - If extension is NOT included, the unique document
+                identifier is expected to be appended at the end of the root
+                identifier above in accordance with HL7 practices.
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element type="hamlns:root" name="root" minOccurs="0" maxOccurs="1"/>
@@ -111,7 +111,7 @@
             ----------
             - patient-id: A freeform string which uniquely identifies a patient within this document
             - sample: This represents a serum sample drawn from this patient
-            - diagnostic-report: Structure for reporting test results for the societies
+            - diagnostic-report: Structure for reporting test results for the regulatory bodies / societies
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element type="xs:string" name="patient-id" minOccurs="1" maxOccurs="1" />
@@ -123,54 +123,60 @@
     <!-- DIAGNOSTIC-REPORT -->
     <xs:complexType name="diagnostic-report">
         <xs:annotation><xs:documentation>
-            This should be a superset of the requirements of the regulatory, standards, or accreditation bodies
-            or their representatives.
+            This structures is intended to represent a superset of the requirements of common regulatory, standards,
+            or accreditation bodies or their representatives. For example, EFI, ASHI, NMDP, ISO
 
-            For example,
-            EFI, ASHI, NMDP,
-            ISO
-
-            Elements:
-            -----------
-            <!--TODO : Homework, why ID?-->
-            report-id: unique identifier for this specific diagnostic report, as interpreted by
             https://cdn.ymaws.com/www.ashi-hla.org/resource/resmgr/docs/standards/2025/2025_ashi_standards.pdf
             https://efi-web.org/uploads/files/EFI-Committees-Standard-Committee-Standards-v8.1.pdf
             https://cdn.ymaws.com/www.ashi-hla.org/resource/resmgr/docs/operations_manual/2026/final_-_2026_ashi_operations.pdf
 
+            This structure It aims to specify the details of the approval of a report by a body, including the
+            authorities involved in signing, interpreting, and performing an assay.
 
-            report-date:
-            transplant-source-id: e.g. Donor ID as specified in a authority system e.g. Eurotransplant
-            tissue-type:
-            patient-antibody-profile: A structure specifying the antibody profile as determined in this haml document
-            accreditation-institution: Name or ID of an accreditation institutes.
-            signing-authority: Exactly one signing authority is to be provided for the document.
-            results-interpreters:
-            performers:
+            This structure also contains a final antibody profile for a given patient.
+
+            Elements:
+            -----------
+            - report-id: unique identifier for this specific diagnostic report.
+                A standards body may require that a report has a unique identifying identifier.
+            - report-date: The date on which the report was generated
+            - transplant-source-id: An identifier of a transplant source within the namespace of an
+                authority system. For example, a Eurotransplant donor id.
+            - tissue-type: The type of tissue being analyzed in this report. For example, kidney.
+            - patient-antibody-profile: A structure specifying the antibody profile as determined in assays performed
+                and reported in this document
+            - accreditation-institution: Name or ID of an accreditation institution
+            - signing-authority: Exactly one signing authority is to be provided for the document. This individual
+                is authoritative on signing this document.
+            - results-interpreters: A structure containing individuals responsible for interpreting the results
+                of assays within this document.
+            - performers: A structure containing individuals responsible for performing the assays within this document.
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element name="report-id" type="xs:string" minOccurs="1" maxOccurs="1" />
             <xs:element name="report-date" type="hamlns:date" minOccurs="0" maxOccurs="1" />
-            <xs:element name="transplant-source-id" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="transplant-source-id" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="tissue-type" type="xs:string" minOccurs="0" maxOccurs="1" />
             <xs:element name="patient-antibody-profile" type="hamlns:patient-antibody-profile" minOccurs="0" maxOccurs="1" />
             <xs:element name="accreditation-institution" type="hamlns:accreditation-institution" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="signing-authority" type="hamlns:signing-authority" minOccurs="0" maxOccurs="1" />
-            <xs:element name="results-interpreters" type="hamlns:results-interpreters" minOccurs="0" maxOccurs="1" />
-            <xs:element name="performers" type="hamlns:performers" minOccurs="0" maxOccurs="1" />
-
+            <xs:element name="clinical-lab-director" type="hamlns:clinical-lab-director" minOccurs="0" maxOccurs="1" />
+            <xs:element name="performer" type="hamlns:performer" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="results-interpreter" type="hamlns:results-interpreter" minOccurs="0" maxOccurs="unbounded" />
         </xs:all>
     </xs:complexType>
 
     <!-- ACCREDITATION-INSTITUTION -->
     <xs:complexType name="accreditation-institution">
         <xs:annotation><xs:documentation>
-            This structure specifies info about the accreditation institution.
+            This structure specifies info about the accreditation institution. This may be an international society,
+            such as ASHI or EFI
 
             Elements:
             -----------
-            accreditation-body: The name of the body or organization responsible for accrediting this document.
-            accreditation-number: A number specific to the individual who performed accreditation, within the accreditation body namespace
+            - accreditation-body: The name of the body or organization responsible for accrediting this document.
+            - accreditation-number: A number specific to the individual who performed accreditation, within the
+                accreditation body namespace
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element name="accreditation-body" type="xs:string" minOccurs="0" maxOccurs="1" />
@@ -185,11 +191,11 @@
 
             Elements:
             -----------
-            signing-authority-id: An optional ID specifying a signing authority
-            signing-authority-name: The name of the individual who acts as a signing authority
-            institution: The institute who is being represented by the signing authority
-            address: The address of the institution of the signing authority.
-            role: The role assumed by the signing authority
+            - signing-authority-id: An optional ID specifying a signing authority
+            - signing-authority-name: The name of the individual who acts as a signing authority
+            - institution: The institute who is being represented by the signing authority
+            - address: The address of the institution of the signing authority.
+            - role: The role assumed by the signing authority
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element name="signing-authority-id" type="xs:string" minOccurs="0" maxOccurs="1" />
@@ -200,17 +206,24 @@
         </xs:all>
     </xs:complexType>
 
-    <!-- RESULTS-INTERPRETERS -->
-    <xs:complexType name="results-interpreters">
+    <!-- CLINICAL-LAB-DIRECTOR -->
+    <xs:complexType name="clinical-lab-director">
         <xs:annotation><xs:documentation>
-            This represents individuals who are involved with interpreting the results
+            This describes the details and role of the laboratory director who oversaw the assay performance and
+            interpretation.
 
             Elements:
             -----------
-            results-interpreter: An individual involved with interpreting the results
+            - lab-director-id: An optional ID specifying a lab director
+            - lab-director-name: The name of the lab director
+            - institution: The institute who is being represented by the lab director
+            - address: The address of the institution of the lab director.
         </xs:documentation></xs:annotation>
         <xs:all>
-            <xs:element name="results-interpreter" type="hamlns:results-interpreter" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="lab-director-id" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="lab-director-name" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="institution" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="address" type="xs:string" minOccurs="0" maxOccurs="1" />
         </xs:all>
     </xs:complexType>
 
@@ -221,14 +234,17 @@
 
             Elements:
             -----------
-            interpreter-id:
-            interpreter-type: Perhaps a Technician or Medical Immunologist
-            interpreter-name:
-            institution:
-            role:
+            - interpreter-id: Unique identifier for this results-interpreter within the institution's namespace
+            - assay-id: A reference to the assay(s) within this document which were interpreted by this individual
+            - interpreter-type: The type of the interpreter.
+                Perhaps a Technician or Medical Immunologist
+            - interpreter-name: The first and last name of the interpreter.
+            - institution: The institution or employer which is represented by the performer.
+            - role: The role of the interpreter. This is the name of their position within the interpreting laboratory.
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element name="interpreter-id" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="assay-id" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="interpreter-type" type="xs:string" minOccurs="0" maxOccurs="1" />
             <xs:element name="interpreter-name" type="xs:string" minOccurs="0" maxOccurs="1" />
             <xs:element name="institution" type="xs:string" minOccurs="0" maxOccurs="1" />
@@ -236,37 +252,24 @@
         </xs:all>
     </xs:complexType>
 
-    <!-- PERFORMERS -->
-    <xs:complexType name="performers">
-        <xs:annotation><xs:documentation>
-            This represents individuals who are involved with carrying out the test
-
-            Elements:
-            -----------
-            results-interpreter:
-        </xs:documentation></xs:annotation>
-        <xs:all>
-            <xs:element name="performer" type="hamlns:performer" minOccurs="1" maxOccurs="unbounded" />
-        </xs:all>
-    </xs:complexType>
-
     <!-- PERFORMER -->
     <xs:complexType name="performer">
         <xs:annotation><xs:documentation>
-            This represents .
-
-            <!-- TODO: Refer to the assay-id of which assay was performed? -->
+            This represents an individual who was responsible for performing(carrying out) the test or assay
 
             Elements:
             -----------
-            performer-id: Unique within the institution
-            performer-type:
-            performer-name:
-            institution:
-            role:
+            - performer-id: Unique identifier for this performer within the institution's namespace
+            - assay-id: A reference to the assay(s) within this document which were performed by this individual
+            - performer-type: The role or type of the performer.
+                Perhaps a Technician or Medical Immunologist or Lab Director
+            - performer-name: The first and last name of the performer.
+            - institution: The institution or employer which is represented by the performer.
+            - role: The role of the performer. This is the name of their position within the interpreting laboratory.
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element name="performer-id" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="assay-id" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="performer-type" type="xs:string" minOccurs="0" maxOccurs="1" />
             <xs:element name="performer-name" type="xs:string" minOccurs="0" maxOccurs="1" />
             <xs:element name="institution" type="xs:string" minOccurs="0" maxOccurs="1" />
@@ -277,7 +280,8 @@
     <!-- PATIENT-ANTIBODY-PROFILE -->
     <xs:complexType name="patient-antibody-profile">
         <xs:annotation><xs:documentation>
-            Interpretation of the antibody profile. Could result from a single assay or a combination of multiple assays.
+            Interpretation of the antibody profile.
+            This interpretation could result from a single assay or a combination of multiple assays.
 
             Elements:
             -----------
@@ -318,17 +322,17 @@
     <!-- SAMPLE -->
     <xs:complexType name="sample">
         <xs:annotation><xs:documentation>
-            This represents a sample, most likely of blood, which was drawn from a patient.
-
-            A sample is a specimen.
+            This represents a sample, most likely of blood, which was drawn from a patient. The details of the sample
+            and surrounding metadata can be specified here. The working sample is used to specify modifications and
+            assays performed on this sample.
 
             Elements:
             -----------
-            sample-id: A string with a unique identifier for this sample
-            sample-datetime: A dateTime which identifies the date and (optionally) the time when a sample was drawn.
-            sample-type: Free-form text, usually this should be "Serum"
-            testing-laboratory: A string with a unique identifier for the laboratory where this sample was drawn
-            working-sample: The working sample specifies treatments which were applied to the sample.
+            - sample-id: A string with a unique identifier for this sample
+            - sample-datetime: A dateTime which identifies the date and (optionally) the time when a sample was drawn.
+            - sample-type: Free-form text, usually this should be "Serum"
+            - testing-laboratory: A string with a unique identifier for the laboratory where this sample was drawn
+            - working-sample: The working sample specifies treatments which were applied to the sample.
     </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element name="sample-id" type="xs:string" minOccurs="0" maxOccurs="1" />
@@ -353,17 +357,18 @@
     <!-- TREATMENT -->
     <xs:complexType name="treatment">
         <xs:annotation><xs:documentation>
-            A treatment describes a process which was performed on a working sample in preparation for solid phase analysis.
-            A working sample may be diluted in preparation for solid-phase-panel analysis.
+            A treatment describes a process which was performed on a working sample in preparation for
+            solid phase analysis.
+            A working sample may be e.g. diluted in preparation for solid-phase-panel analysis.
 
             Elements:
             -----------
-            method: A freeform description of the treatment which has been applied
-            method-description: Details on the method performed
-            dilution-factor: Denominator of the dilution ratio, e.g. "16" in the case of a 1:16 dilution
-            diluent: Substance used for dilution or buffer, e.g. PBS
-            temperature: Temperature of the treatment in Celsius
-            time-seconds: How long the treatment is performed.
+            - method: A freeform description of the treatment which has been applied
+            - method-description: Details on the method performed
+            - dilution-factor: Denominator of the dilution ratio, e.g. "16" in the case of a 1:16 dilution
+            - diluent: Substance used for dilution or buffer, e.g. PBS
+            - temperature: Temperature of the treatment in Celsius
+            - time-seconds: How long the treatment is performed.
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element type="xs:string" name="method"/>
@@ -408,15 +413,15 @@
 
             Elements:
             -----------
-            assay-id: A unique identifier for this specific assay element. IDs should not be re-used within this document,
+            - assay-id: A unique identifier for this specific assay element. IDs should not be re-used within this document,
                 to allow them to be used for unambiguous referencing within this document.
-            run-id: A unique identifier for this run.
-            performer-id: A reference to the performer-id used within this document, referring to who performed the assay
-            assay-date: Date and time the assay was performed
-            assay-kit: Details to the assay kit which was used to perform the test
-            target-bead-observation: Results and interpretation from observations of a target bead.
-            target-cell-observation: Results and interpretation from observations of a target cell.
-            assay-interpretation: Overall interpretation of antigenic results of this assay, perhaps for clinical decision making
+            - run-id: A unique identifier for this run.
+            - performer-id: A reference to the performer-id used within this document, referring to who performed the assay
+            - assay-date: Date and time the assay was performed
+            - assay-kit: Details to the assay kit which was used to perform the test
+            - target-bead-observation: Results and interpretation from observations of a target bead.
+            - target-cell-observation: Results and interpretation from observations of a target cell.
+            - assay-interpretation: Overall interpretation of antigenic results of this assay, perhaps for clinical decision making
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element name="assay-id" type="xs:string" minOccurs="1" maxOccurs="1"/>
@@ -433,22 +438,25 @@
     <!-- ASSAY-KIT -->
     <xs:complexType name="assay-kit">
         <xs:annotation><xs:documentation>
-            Assay kit used for antibody test
-            This includes metadata about the assay kit: identifiers, assay type, manufacturer, and kit specific attributes
+            This section describes the kit used to perform an antibody assay. It specifies metadata
+            about the assay kit, such as identifiers, assay type, manufacturer, and kit-specific attributes
 
             Elements:
             -----------
-            assay-type: Assay type Ex. Solid Phase Panel or CDC
-            assay-catalog: Identifiers of the catalog used to perform the assay
-            detection-reagent-catalog: Identifiers of the catalog used for detection reagents, may be the same catalog as used in the assay
-            protocol-variations: A description of variations from standard
+            - assay-type: Assay type Ex. Solid Phase Panel or CDC
+            - assay-catalog: A structure containing details of the catalog used to perform the assay
+            - detection-reagent-catalog: Identifier of the catalog used for detection reagents, this may be the same
+                catalog identifier as used in the assay
+            - protocol-variations: A description of variations from standard
                 protocols as defined by the manufacturer.
-            interpretation-software: The software which was used for analysis of the solid-phase-panel results
-            interpretation-software-version: The version of the software used for analysis of the solid-phase-panel results
-            raw-MFI-divider: This numerical value is used for comparing multiple analysis machines.
-                Sometimes these devices systematically have biases on the same sample, or raw MFI reads which vary among versions of machines.
-                and this constant could be used to e.g. calibrate raw-MFI across multiple batches.
-                If raw-MFI-divider is not provided, assume the divider is 1.
+            - interpretation-software: The software which was used for analysis of the solid-phase-panel results
+            - interpretation-software-version: The version of the software which was used for analysis of the
+                solid-phase-panel results
+            - raw-MFI-divider: This numerical value is used for comparing multiple analysis machines.
+                It may be that  devices systematically have biases on the same sample, or perhaps raw MFI reads
+                which vary among versions of machines.
+                This constant could be used to e.g. calibrate raw-MFI across multiple batches.
+                If raw-MFI-divider is not provided, it should be assumed that the divider is 1.
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element name="assay-type" type="xs:string" minOccurs="0" maxOccurs="1" />
@@ -464,13 +472,15 @@
     <!-- CATALOG -->
     <xs:complexType name="catalog">
         <xs:annotation><xs:documentation>
-            Identifiers of the catalog used in an assay or detection reagents.
+            Details of the catalog used in an assay.
+            This structure is used also to specify a catalog of detection reagents.
 
             Elements:
             ----------
-            - kit-manufacturer: The company or institution that developed the kit
-            - kit-description: Text description of assay kit
-            - catalog-number: Identifier of the catalog.
+            - kit-manufacturer: The company or institution which developed the kit
+            - kit-description: Text description of assay kit, perhaps useful information about the loci targeted
+                or specialization of the specific kit.
+            - catalog-number: Identifier of the catalog, probably as provided by the manufacturer
             - lot-number: Identifier of the lot from within this catalog
         </xs:documentation></xs:annotation>
         <xs:all>
@@ -487,14 +497,17 @@
             This structure contains information about modifications from standard protocols as defined by manufacturer,
             such as wash count, antiglobulin use, and serum treatment details, absorption.
 
-            For example, this specifies a different detection technique on a standard assay, such as
-            a C1q modification/ C3d modifications, or temperature variation, or a different number of serum washes performed.
+            For example, you may need to specify a different detection technique on a standard assay, such as
+            a C1q modification/ C3d modifications, or temperature variation, or a different number of serum washes
+            performed.
 
             Elements:
             ----------
             - post-serum-wash-count: how many times the cells were washed after serum incubation
-            - variation-type: A short definition of the type of variation which was applied to a protocol, when deviating from a standard vendor-specified protocol
-			- variation-description:  A long description of the type of variation which was applied to a protocol, when deviating from a standard vendor-specified protocol
+            - variation-type: A short definition of the type of variation which was applied to a protocol,
+                when deviating from a standard vendor-specified protocol
+			- variation-description:  A long description of the type of variation which was applied to a protocol,
+                when deviating from a standard vendor-specified protocol
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element name="post-serum-wash-count" type="xs:int" minOccurs="0" maxOccurs="1" />
@@ -507,8 +520,8 @@
     <xs:complexType name="bead-info">
         <xs:annotation><xs:documentation>
             This structure contains information about a bead within a panel.
-            The bead has a certain HLA specificity or specificities.
-            This might be a control bead or a test bead.
+            The bead likely has a certain HLA specificity or specificities, and it should be specified if this bead is
+            a control bead or a test bead.
 
             Elements:
             ----------
@@ -521,8 +534,8 @@
             - HLA-target-serological-specificity: This is an PL String containing the determined
                 HLA serological specificity of the bead.
             - antigen-density: A numerical value specifying the absolute density of antigen present on this bead
-            - relative-antigen-density: A numerical value specifying the relative density of antigen present on this bead
-                To be used for comparison within this panel, and possibly for calculations of modified MFI.
+            - relative-antigen-density: A numerical value specifying the relative density of antigen present on this
+                bead. This may be used for comparison within this panel, and possibly for calculations of modified MFI.
            </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element type="xs:string" name="bead-id" minOccurs="1" maxOccurs="1" />
@@ -546,6 +559,7 @@
             <xs:enumeration value="target"/>
             <xs:enumeration value="positive-control"/>
             <xs:enumeration value="negative-control"/>
+            <xs:enumeration value="other"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -553,23 +567,23 @@
     <xs:complexType name="cell-info">
         <xs:annotation><xs:documentation>
             This structure contains information about a cell within a panel.
-            The cell has a certain HLA specificity or specificities.
-            This might be a control cell or a test cell.
+            The cell has a certain HLA specificity or specificities, and we can specify the intended use of the cell,
+            as e.g. a positive or negative control.
 
             Elements:
             ----------
             - cell-id: A string uniquely identifying this cell within the panel.
-            For example, ID may be comprised of [assay-kit lot-number + cell-identifier]
+                For example, ID may be comprised of [assay-kit lot-number + cell-identifier]
             - cell-type: Valid options are "target", "positive-control", "negative-control"
             - cell-source: A text description of the source or origin of the cells being observed.
-            - HLA-target-type: This is a PL String containing the HLA phenotype specificity of the bead.
-            This is usually specifying a specific HLA molecule (2 fields of HLA nomenclature), or possibly multiple
-            present molecules.
+            - HLA-target-type: This is a PL String containing the HLA phenotype specificity of the cell.
+                This is usually specifying a specific HLA molecule (2 fields of HLA nomenclature), or possibly multiple
+                present molecules.
             - HLA-target-serological-specificity: This is an PL String containing the determined
-            HLA serological specificity of the bead.
-            - antigen-density: A numerical value specifying the absolute density of antigen present on this bead
-            - relative-antigen-density: A numerical value specifying the relative density of antigen present on this bead
-            To be used for comparison within this panel, and possibly for calculations of modified MFI.
+                HLA serological specificity of the cell.
+            - antigen-density: A numerical value specifying the absolute density of antigen present on this cell
+            - relative-antigen-density: A numerical value specifying the relative density of antigen present on this
+                cell to be used for comparison within this panel, and possibly for calculations of modified MFI.
 
         </xs:documentation></xs:annotation>
         <xs:all>
@@ -591,6 +605,9 @@
             A PL String is a Phenotype List String. PL String encodes the HLA phenotype composition of reagents
             e.g. cells or single antigens used in antibody detection assays
             https://plstring.org/
+
+            A PL String is often specified as HLA molecules, using standard HLA (two-field) nomenclature.
+            A variety of serological typings can also be specified, depending on intended use case.
         </xs:documentation></xs:annotation>
         <xs:restriction base="xs:string">
         </xs:restriction>
@@ -600,40 +617,47 @@
     <xs:simpleType name="classification">
         <xs:annotation><xs:documentation>
             This field describes if a bead or cell was determined as Positive or Negative.
-            Borderline results are also allowed.
-            This is a valid result, but is ambiguous if it should be called Positive or Negative.
-            It could also be considered as Intermediate.
-			
-			            Undetermined means an assessment could not be made, perhaps due to data quality issues?
+            Borderline results are also allowed, which would indicate that this is a valid result,
+            but is ambiguous if it should be called Positive or Negative. It could also be considered as Intermediate.
+
+            Undetermined indicates an assessment could not be made, perhaps due to data quality issues.
         </xs:documentation></xs:annotation>
         <xs:restriction base="xs:string">
             <xs:enumeration value="Positive"/>
             <xs:enumeration value="Negative"/>
             <xs:enumeration value="Questionable"/>
             <xs:enumeration value="Undetermined"/>
+            <xs:enumeration value="Intermediate"/>
+            <xs:enumeration value="Borderline"/>
         </xs:restriction>
     </xs:simpleType>
 
-    <!-- RANK -->
-    <xs:simpleType name="rank">
+    <!-- CDC-SCORE -->
+    <xs:simpleType name="cdc-score">
         <xs:annotation><xs:documentation>
-            This bead rank is a numerical system for assigning the specificities of beads.
+            This cdc scoring system is a numerical system for assigning the reactivity of a cell or bead, also known as a NIH
+            classification.
 
-            There are strictly allowed values.
-
-            Historically based on system devised by Terasaki. I THINK PEOPLE ARE USED TO CALL IT THE NIH CLASSIFICATION
             https://www.researchgate.net/figure/Score-system-for-the-analysis-of-the-standard-Complement-Dependent_tbl1_6949414
-            <!-- TODO: Add a citation here -->
-            <!-- TODO: Currently implemented as an integer to be flexible.
-            But "Undetermined" cannot be reported
-             In that case, the rank is not reported.-->
+
+            It is originally based on an interpretation of the percent cytotoxicity observed.
+            The NIH / Terasaki Score provides a specific categorizations applied to specific amounts of lost cells
+            Score 1: 0% - 10% cell lysis (Negative)
+            Score 2: 11% - 20% cell lysis (Doubtful/Weak)
+            Score 4: 21% - 50% cell lysis (Weakly Positive)
+            Score 6: 51% - 80% cell lysis (Positive)
+            Score 8: >80% cell lysis (Strongly Positive)
+                https://www.researchgate.net/figure/Score-system-for-the-analysis-of-the-standard-Complement-Dependent_tbl1_6949414
+
+            This scoring system was historically carried over from cells to luminex assays,
+            by using a mfi threshold instead of a cytotoxicity value.
         </xs:documentation></xs:annotation>
         <xs:restriction base="xs:int"/>
         <!--
         <xs:restriction base="xs:string">
             <xs:enumeration value="8"/>
-            <xs:enumeration value="5"/>
-            <xs:enumeration value="3"/>
+            <xs:enumeration value="6"/>
+            <xs:enumeration value="4"/>
             <xs:enumeration value="2"/>
             <xs:enumeration value="1"/>
             <xs:enumeration value="Undetermined"/>
@@ -642,35 +666,35 @@
     </xs:simpleType>
 
     <!-- BEAD-RAW-DATA -->
-    <!-- TODO: Idea: MERGE WITH BEAD results?? IS BEAD COUNT ON THE RIGHT PLACE HERE?-->
     <xs:complexType name="bead-raw-data">
         <xs:annotation><xs:documentation>
-            Bead observation raw data
+            Here we specify the raw data for a bead observation. This includes data as measured from the instrument,
+            and should not specify modified, calculated, or normalized values.
 
             Elements:
             ----------
             - bead-count: Count of beads identified (int) for this observation (or bead gate)
-            - raw-mfi: Raw MFI result for this bead and serum
-            No modifications or calculations have been performed on this measurement.
+            - raw-mfi: Raw MFI result for this bead and serum.
+                Note: No modifications or calculations have been performed on this measurement.
         </xs:documentation></xs:annotation>
         <xs:all>
-            <xs:element type="xs:double" name="raw-MFI" minOccurs="1" maxOccurs="1"/>
+            <xs:element type="xs:double" name="raw-MFI" minOccurs="0" maxOccurs="1"/>
             <xs:element type="xs:double" name="bead-count" minOccurs="0" maxOccurs="1"/>
         </xs:all>
     </xs:complexType>
 
     <!-- CELL-RAW-DATA -->
-    <!-- TODO: Idea: MERGE WITH BEAD results?? IS BEAD COUNT ON THE RIGHT PLACE HERE?-->
     <xs:complexType name="cell-raw-data">
         <xs:annotation><xs:documentation>
-            Bead observation raw data
+            Here we specify the raw data for a cell observation. This includes data as measured from the instrument,
+            and should not specify modified, calculated, or normalized values.
 
             Elements:
             ----------
             - raw-MFI: Raw MFI result for this cell and serum
+                No modifications or calculations have been performed on this measurement.
             - raw-percent-cytotoxicity: Percentage of cells which died during an analysis
-            - cell-count: Count of cells identified (int) for this observation
-            No modifications or calculations have been performed on this measurement.
+            - cell-count: How many cells were counted for this observation
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element type="xs:double" name="raw-MFI" minOccurs="0" maxOccurs="1"/>
@@ -679,15 +703,14 @@
         </xs:all>
     </xs:complexType>
 
-    <!-- BEAD-ADJUSTED-DATA -->
-    <!-- TODO: Can bead-adjusted-data and cell-adjusted data be combined into a single "adjusted data"?  Should they for simplicity?? -->
-    <xs:complexType name="bead-adjusted-data">
+    <!-- ADJUSTED-DATA -->
+    <xs:complexType name="adjusted-data">
         <xs:annotation><xs:documentation>
             Adjusted MFI results after formula and controls applied
 
             Elements:
             ----------
-            - adjusted-data-id: ID, unique within this target-bead-observation
+            - adjusted-data-id: ID, unique within this specific target-bead-observation/target-cell-observation
             - adjusted-mfi:  Adjusted result after formula and controls applied
             - formula: Declaration of formula applied to derive adjusted MFI or MFI ratio. Freeform text, for example:
 
@@ -698,36 +721,37 @@
                 Modified MFI =
                 (bead Raw / 3 - Sample Negative / 3)
                 - (Background raw / 3 - background negative / 3)
-				
-				## e.g. background correction based upon the loceus specific self background ###
+
+				## e.g. background correction based upon the locus specific self background ###
 				## for that I need to create A B C DRB1345, DQ DP adjustments -> 6 adjusted-data-IDs
-				
+
 				#1 for HLA-A
 				Modified MFI =
                 (bead Raw  - Self HLA-A background)
-				
+
 				#2 for HLA-B
 				Modified MFI =
                 (bead Raw  - Self HLA-B background)
-				
+
 				#3 for HLA-C
 				Modified MFI =
                 (bead Raw  - Self HLA-C background)
-				
-				Alternative 
+
+				Alternative
 				#xx for self HLA locus-specific
 				Modified MFI =
                 (bead Raw  - Self HLA background related to the analyzed bead)
-				
-				etc --> WE NEED TO HAVE AN EXAMPLE TO CHECK IF AND HOW THIS CAN WORKOUT - BE REMINDED THAT THIS IS THE STANDARD PROCEDURE FOR WERFEN
 
-            This can also include information about the calibrator information.
+                This may also include information about the calibrator information.
+            - plausible: Boolean indicator of bead or cell observation plausibility. If there is reason to indicate
+                that this result is not plausible, this field can be set to "False" and details specified in
+                "plausible-reason". If the field is not provided, plausible is assumed to be true.
+            - plausible-reason: Reasoning declared for bead observation plausibility. For example, perhaps
+                an instrument or preparation malfunction was observed.
+                Another reason is that an antibody might target the transmembrane region of an HLA,
+                and this is not a clinically relevant reactivity event.
+                Or perhaps the antibody target is likely a self-antigen.
 
-            - bead-plausible: Boolean indicator of bead observation plausibility
-            - bead-plausible-reason: Reasoning declared for bead observation plausibility
-
-            Attributes:
-            -----------
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element type="xs:string" name="adjusted-data-id" minOccurs="1" maxOccurs="1"/>
@@ -735,131 +759,38 @@
             <xs:element type="xs:double" name="adjusted-mfi" minOccurs="0" maxOccurs="1"/>
             <xs:element type="xs:double" name="mfi-ratio" minOccurs="0" maxOccurs="1"/>
             <xs:element type="xs:string" name="formula" minOccurs="0" maxOccurs="1"/>
-            <!-- TODO: IS BEAD-PLAUSIBLE AN ADJUSTMENT OR AN INTERPRETATION??? CAN THIS BE SET TO true BY DEFAULT?? OR ASSUME THAT empty MEANS true -->
-            <xs:element type="xs:boolean" name="bead-plausible" minOccurs="0" maxOccurs="1"/>
-            <xs:element type="xs:string" name="bead-plausible-reason" minOccurs="0" maxOccurs="1"/>
+            <xs:element type="xs:boolean" name="plausible" minOccurs="0" maxOccurs="1"/>
+            <xs:element type="xs:string" name="plausible-reason" minOccurs="0" maxOccurs="1"/>
         </xs:all>
     </xs:complexType>
-
-    <!-- CELL-ADJUSTED-DATA -->
-    <xs:complexType name="cell-adjusted-data">
-        <xs:annotation><xs:documentation>
-            Adjusted MFI results after formula and controls applied
-
-            Elements:
-            ----------
-            - adjusted-data-id: ID, unique within this target-cell-observation
-            - adjusted-mfi:  Adjusted result after formula and controls applied
-            - cdc-score: An interpretation of the percent cytotoxicity observed.
-                The NIH / Terasaki Score provides a specific categorizations applied to specific amounts of lost cells
-                Score 1: 0% - 10% cell lysis (Negative)
-                Score 2: 11% - 20% cell lysis (Doubtful/Weak)
-                Score 4: 21% - 50% cell lysis (Weakly Positive)
-                Score 6: 51% - 80% cell lysis (Positive)
-                Score 8: >80% cell lysis (Strongly Positive)
-
-            - formula: Declaration of formula applied to derive adjusted MFI or MFI ratio. Freeform text, for example:
-
-            Modified MFI =
-            (cell Raw - Sample Negative)
-            - (Background raw - background negative)
-
-            Modified MFI =
-            (cell Raw / 3 - Sample Negative / 3)
-            - (Background raw / 3 - background negative / 3)
-
-            ## e.g. background correction based upon the loceus specific self background ###
-            ## for that I need to create A B C DRB1345, DQ DP adjustments -> 6 adjusted-data-IDs
-
-            #1 for HLA-A
-            Modified MFI =
-            (cell Raw  - Self HLA-A background)
-
-            #2 for HLA-B
-            Modified MFI =
-            (cell Raw  - Self HLA-B background)
-
-            #3 for HLA-C
-            Modified MFI =
-            (cell Raw  - Self HLA-C background)
-
-            Alternative
-            #xx for self HLA locus-specific
-            Modified MFI =
-            (cell Raw  - Self HLA background related to the analyzed cell)
-
-            etc --> WE NEED TO HAVE AN EXAMPLE TO CHECK IF AND HOW THIS CAN WORKOUT - BE REMINDED THAT THIS IS THE STANDARD PROCEDURE FOR WERFEN
-
-            This can also include information about the calibrator information.
-
-            - cell-plausible: Boolean indicator of cell observation plausibility
-            - cell-plausible-reason: Reasoning declared for cell observation plausibility
-
-            Attributes:
-            -----------
-        </xs:documentation></xs:annotation>
-        <xs:all>
-            <xs:element type="xs:string" name="adjusted-data-id" minOccurs="1" maxOccurs="1"/>
-            <xs:element type="xs:string" name="adjustment-method" minOccurs="0" maxOccurs="1"/>
-            <xs:element type="xs:double" name="adjusted-mfi" minOccurs="0" maxOccurs="1"/>
-            <xs:element type="xs:double" name="cdc-score" minOccurs="0" maxOccurs="1"/>
-            <xs:element type="xs:double" name="mfi-ratio" minOccurs="0" maxOccurs="1"/>
-            <xs:element type="xs:string" name="formula" minOccurs="0" maxOccurs="1"/>
-            <!-- TODO: IS CELL-PLAUSIBLE AN ADJUSTMENT OR AN INTERPRETATION??? CAN THIS BE SET TO true BY DEFAULT?? OR ASSUME THAT empty MEANS true -->
-            <xs:element type="xs:boolean" name="cell-plausible" minOccurs="0" maxOccurs="1"/>
-            <xs:element type="xs:string" name="cell-plausible-reason" minOccurs="0" maxOccurs="1"/>
-
-        </xs:all>
-    </xs:complexType>
-
-
-    <!-- BEAD-PLAUSIBLE-REASON -->
-    <!--
-    TODO: Is it too restrictive to allow only these reasons?
-    TODO: Probably should allow a "plausible" option here?
-    For now it's encoded as a string, we're not using this structure.
-    -->
-    <xs:simpleType name="bead-plausible-reason">
-        <xs:annotation><xs:documentation>
-            This field contains descriptions of possible reasons a bead is determined plausible or not.
-            For example, one reason is that an AB might target the transmembrane region of an HLA, and this is not a clinically relevant
-            reactivity event.
-
-            Elements:
-            ----------
-            - Enumerated list of possible plausibility reasons OTHER option???
-
-            Attributes:
-            -----------
-        </xs:documentation></xs:annotation>
-
-
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="transmembrane-antibody" />
-            <xs:enumeration value="self-antigen" />
-			<xs:enumeration value="other" />
-            <!-- TODO: ADD EXPLANATION FOR other. ALTERNATIVE IS TO KEEP IT FULLY OPEN.-->
-
-        </xs:restriction>
-    </xs:simpleType>
 
     <!-- BEAD-INTERPRETATION -->
     <xs:complexType  name="bead-interpretation" >
         <xs:annotation><xs:documentation>
-            This structure contains an interpretation of a single bead.
+            This structure contains an interpretation of a single bead. It encapsulates the interpretation methods
+            used and potentially a qualitative result summarizing the interpretation.
 
             Elements:
             ----------
-            - adjusted-data-id: A reference to the adjusted-data-id which is used in this calculation
+            - adjusted-data-id: A reference to the adjusted-data-id which is used in this interpretation. This is useful
+                if, for example, a MFI or Ratio threshold is applied. This id refers to the value was compared
+                to the threshold.
             - bead-classification: A text Positive/Negative/Borderline/Unspecified classification.
-            - bead-rank: a numerical bead rank specifying if there was reactivity on this bead.
-            - classification-entity: This is the individual or entity who has performed a bead interpretation.
-            - interpretation-reason: This is the reason a bead has been interpreted. For example, a standard MFI threshold (e.g. 500) was used
+            - bead-rank: a numerical rank specifying if there was reactivity on this bead.
+            - mfi-threshold: Use this field to specify the numerical
+                MFI threshold/cutoff which was used to classify a bead. (e.g. 500)
+            - ratio-threshold: Use this field to specify the numerical
+                MFI ratio threshold/cutoff which was used to classify a bead.
+            - classification-entity: This is the individual, software, or entity
+                which has performed a bead interpretation. For example, an analyst's name or position, or to clarify a
+                human vs automated interpretation.
+            - interpretation-reason: This is the reason or methodology for which a bead has been interpreted.
+                For example, a standard MFI threshold (e.g. 500) was used
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element type="xs:double" name="adjusted-data-id" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element type="hamlns:classification" name="bead-classification" minOccurs="0" maxOccurs="1"/>
-            <xs:element type="hamlns:rank" name="bead-rank" minOccurs="0" maxOccurs="1"/>
+            <xs:element type="hamlns:cdc-score" name="bead-rank" minOccurs="0" maxOccurs="1"/>
             <xs:element type="xs:double" name="mfi-threshold" minOccurs="0" maxOccurs="1"/>
             <xs:element type="xs:double" name="ratio-threshold" minOccurs="0" maxOccurs="1"/>
             <xs:element type="xs:string" name="classification-entity" minOccurs="0" maxOccurs="1"/>
@@ -874,16 +805,26 @@
 
             Elements:
             ----------
-            - adjusted-data-id: A reference to the adjusted-data-id which is used in this calculation
+            - adjusted-data-id: A reference to the adjusted-data-id which is used in this interpretation. This is useful
+                if, for example, a MFI or Ratio threshold is applied. This id refers to the value was compared
+                to the threshold.
             - cell-classification: A text Positive/Negative/Borderline/Unspecified classification.
-            - cell-rank: a numerical cell rank specifying if there was reactivity on this cell.
-            - classification-entity: This is the individual or entity who has performed a cell interpretation.
-            - interpretation-reason: This is the reason a cell has been interpreted. For example, a standard MFI threshold (e.g. 500) was used
+            - cdc-score: a numerical rank based on percentage of cytotoxicity
+                specifying if there was reactivity on this well.
+            - mfi-threshold: Use this field to specify the numerical
+                MFI threshold/cutoff which was used to classify a cell. (e.g. 500)
+            - ratio-threshold: Use this field to specify the numerical
+                MFI ratio threshold/cutoff which was used to classify a cell.
+            - classification-entity: This is the individual, software, or entity
+                which has performed a cell interpretation. For example, an analyst's name or position, or to clarify a
+                human vs automated interpretation.
+            - interpretation-reason: This is the reason or methodology for which a cell has been interpreted.
+                For example, a standard MFI threshold (e.g. 500) was used
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element type="xs:string" name="adjusted-data-id" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element type="hamlns:classification" name="cell-classification" minOccurs="0" maxOccurs="1"/>
-            <xs:element type="hamlns:rank" name="cell-rank" minOccurs="0" maxOccurs="1"/>
+            <xs:element type="hamlns:cdc-score" name="cdc-score" minOccurs="0" maxOccurs="1"/>
             <xs:element type="xs:double" name="mfi-threshold" minOccurs="0" maxOccurs="1"/>
             <xs:element type="xs:double" name="ratio-threshold" minOccurs="0" maxOccurs="1"/>
             <xs:element type="xs:string" name="classification-entity" minOccurs="0" maxOccurs="1"/>
@@ -894,27 +835,24 @@
     <!-- TARGET-BEAD-OBSERVATION -->
     <xs:complexType name="target-bead-observation">
         <xs:annotation><xs:documentation>
-            A single bead within a solid phase panel.
-            The bead MAY have a specificity, which may be an allele name or a serological specificity.
-            The bead MAY have information about its positive and negative controls.
-            The bead will be a target bead,  a negative-control-bead or a positive-control-bead.
-            A target bead MAY be provided without the 8 control observations.
-            A control bead MUST reference the target bead it relates to.
-            A comprehensive observation declaration of a target bead MAY include:
-                bead-observation (target-bead + working-sample applied)
+            A single bead within e.g. a solid phase panel.
+            The bead may have a specificity, which may be an allele name or a serological specificity.
+            The target specificity and the role of the bead (target vs. control) is to be provided within the
+            bead-info structure.
 
             Elements:
             ----------
             - bead-info: Structure containing details on the specificity and identifiers of an individual bead
             - bead-raw-data: Structure containing measured MFI or raw data as measured in the assay.
-            - adjusted-data: Structure containing converted MFIs, formulas used, and interpretations of bead-specific results.
-            - bead-interpretation: Interpretation data on single bead result
+            - adjusted-data: Structure containing converted MFIs, formulas used,
+                and computation methodology of bead-specific adjusted data.
+            - bead-interpretation: Interpretation and results on single bead result
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element type="hamlns:bead-info" name="bead-info" minOccurs="1" maxOccurs="1" />
             <xs:element type="hamlns:bead-raw-data" name="bead-raw-data" minOccurs="0" maxOccurs="1" />
-            <xs:element type="hamlns:bead-adjusted-data" name="bead-adjusted-data" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element type="hamlns:bead-interpretation" name="bead-interpretation" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element type="hamlns:adjusted-data" name="bead-adjusted-data" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element type="hamlns:bead-interpretation" name="bead-interpretation" minOccurs="0" maxOccurs="unbounded"/>
         </xs:all>
     </xs:complexType>
 
@@ -922,23 +860,22 @@
     <xs:complexType name="target-cell-observation">
         <xs:annotation><xs:documentation>
             A single cell observation within an e.g. Flow Crossmatch panel.
-            The cell MAY have a specificity, which may be an allele name or a serological specificity.
-            The cell MAY have information about its positive and negative controls.
-            The cell will be a target cell,  a negative-control-cell or a positive-control-cell.
-            A comprehensive observation declaration of a target cell MAY include:
-            cell-observation (target-cell + working-sample applied)
+            The cell may have a specificity, which may be an allele name or a serological specificity.
+            The target specificity and the role of the cell (target vs. control) is to be provided within the
+            cell-info structure.
 
             Elements:
             ----------
             - cell-info: Structure containing details on the specificity and identifiers of an individual cell
             - cell-raw-data: Structure containing measured MFI or raw data as measured in the assay.
-            - cell-adjusted-data: Structure containing converted MFIs, formulas used, and interpretations of cell-specific results.
+            - cell-adjusted-data: Structure containing converted MFIs, formulas used,
+                and computation methodology of cell-specific adjusted data.
             - cell-interpretation: Interpretation data on single cell result
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element type="hamlns:cell-info" name="cell-info" minOccurs="1" maxOccurs="1" />
             <xs:element type="hamlns:cell-raw-data" name="cell-raw-data" minOccurs="0" maxOccurs="1" />
-            <xs:element type="hamlns:cell-adjusted-data" name="cell-adjusted-data" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element type="hamlns:adjusted-data" name="cell-adjusted-data" minOccurs="0" maxOccurs="unbounded" />
             <xs:element type="hamlns:cell-interpretation" name="cell-interpretation" minOccurs="0" maxOccurs="unbounded" />
         </xs:all>
     </xs:complexType>
@@ -949,12 +886,13 @@
             An Interpretation is where we put the results of an entire assay.
             This includes which antigens/specificities are determined to be positive,
             negative or questionable based on the adjusted MFI scores of target bead
-            observations
+            observations.
 
             Elements:
             ------------
             - interpreter-id: A reference to the id of the results interpreter who performed this assay-interpretation
-            - interpretation-context: For example, "Clinical Interpretation"
+            - interpretation-context: A short summary of the reason for performing the interpretation.
+                For example, "Clinical Interpretation" or "Kidney Transplantation"
             - interpretation-context-comment: Further commentary on clinical interpretation of the assay.
                 Ex. "In the context of bone marrow transfusion we have identified these unacceptable
                 specificities"
@@ -962,9 +900,9 @@
             - questionable-specificities: PL String of questionable antibody reactivity
             - negative-specificities: PL String of negative antibody reactivity
             - reject-assay: Boolean if the assay was rejected or not.
-            - reject-reason: Freeform Text describing why this assay result was rejected
-            - failure-code: An Integer value specifying some assay failure.
-                <!-- TODO: Define reject reasons and failure codes better -->
+            - reject-reason: Freeform Text describing why this assay result was rejected, and which entity made
+                the determination to reject the assay
+            - failure-code: An Integer value specifying an assay failure.
         </xs:documentation></xs:annotation>
         <xs:all>
             <xs:element name="interpreter-id" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>

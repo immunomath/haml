@@ -30,7 +30,7 @@
                             <adjustment-method>AD-MFI</adjustment-method>
                             <adjusted-mfi>8010</adjusted-mfi>
                             <formula>Background-adjusted MFI = bead raw MFI - negative control background</formula>
-                            <bead-plausible>true</bead-plausible>
+                            <plausible>true</plausible>
                         </bead-adjusted-data>
 
                     </target-bead-observation>
